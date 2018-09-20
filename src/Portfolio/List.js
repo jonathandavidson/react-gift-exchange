@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 
 export default class PortfolioList extends Component {
   constructor(props) {
@@ -10,24 +10,12 @@ export default class PortfolioList extends Component {
     }
     this.handleAdd = this.handleAdd.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleAdd(event) {
     event.preventDefault();
-    this.setState(state => ({
-      inputValue: "",
-      portfolios: state.portfolios.concat({
-        id: state.portfolios.length + 1,
-        name: this.state.inputValue
-      })
-    }));
-  }
-
-  handleDelete(id) {
-    this.setState(state => ({
-      portfolios: state.portfolios.filter(portfolio => portfolio.id !== id)
-    }));
+    this.props.onAdd({ name: this.state.inputValue });
+    this.setState({ inputValue: "" })
   }
 
   handleInputChange(event) {
@@ -35,11 +23,11 @@ export default class PortfolioList extends Component {
   }
 
   render() {
-    const listItems = this.state.portfolios.map(({ id, name }) => {
+    const listItems = this.props.portfolios.map(({ id, name }) => {
       return (
         <li key={id}>
           <a href="">{name}</a>
-          <button onClick={() => this.handleDelete(id)}>Delete</button>
+          <button onClick={() => this.props.onDelete(id)}>Delete</button>
         </li>
       );
     });
@@ -56,4 +44,10 @@ export default class PortfolioList extends Component {
       </div>
     );
   }
+}
+
+PortfolioList.propTypes = {
+  onAdd: PropTypes.func,
+  onDelete: PropTypes.func,
+  portfolios: PropTypes.array
 }
