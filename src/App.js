@@ -1,18 +1,25 @@
+// @flow
 import React, { Component } from 'react';
 import PortfolioList from './Portfolio/List';
 import './App.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      portfolios: []
-    }
-    this.addPortfolio = this.addPortfolio.bind(this);
-    this.deletePortfolio = this.deletePortfolio.bind(this);
+type Props = {};
+
+type Portfolio = {
+  id: number,
+  name: string
+};
+
+type State = {
+  portfolios: Array<Portfolio>
+};
+
+export default class App extends Component<Props, State> {
+  state = {
+    portfolios: []
   }
 
-  addPortfolio(portfolio) {
+  addPortfolio = (portfolio: { name: string }) => {
     this.setState(state => ({
       portfolios: state.portfolios.concat({
         id: state.portfolios.length + 1,
@@ -21,7 +28,7 @@ class App extends Component {
     }));
   }
 
-  deletePortfolio(portfolioId) {
+  deletePortfolio = (portfolioId: number) => {
     this.setState(state => ({
       portfolios: state.portfolios.filter(portfolio => portfolio.id !== portfolioId)
     }));
@@ -39,5 +46,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;

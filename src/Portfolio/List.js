@@ -1,33 +1,44 @@
+// @flow
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
-export default class PortfolioList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputValue: "",
-      portfolios: []
-    }
-    this.handleAdd = this.handleAdd.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
+type Portfolio = {
+  id: number,
+  name: string
+};
+
+type Props = {
+  onAdd: (portfolio: { name: string }) => void,
+  onDelete: (id: number) => void,
+  portfolios: Array<Portfolio>
+};
+
+type State = {
+  inputValue: string,
+  portfolios: Array<{}>
+};
+
+export default class PortfolioList extends Component<Props, State> {
+  state = {
+    inputValue: "",
+    portfolios: []
   }
 
-  handleAdd(event) {
+  handleAdd = (event: SyntheticEvent<>) => {
     event.preventDefault();
     this.props.onAdd({ name: this.state.inputValue });
     this.setState({ inputValue: "" })
   }
 
-  handleInputChange(event) {
+  handleInputChange = (event: SyntheticInputEvent<>) => {
     this.setState({ inputValue: event.target.value });
   }
 
   render() {
-    const listItems = this.props.portfolios.map(({ id, name }) => {
+    const listItems = this.props.portfolios.map((portfolio: Portfolio) => {
       return (
-        <li key={id}>
-          <a href="">{name}</a>
-          <button onClick={() => this.props.onDelete(id)}>Delete</button>
+        <li key={portfolio.id}>
+          <a href="">{portfolio.name}</a>
+          <button onClick={() => this.props.onDelete(portfolio.id)}>Delete</button>
         </li>
       );
     });
@@ -44,10 +55,4 @@ export default class PortfolioList extends Component {
       </div>
     );
   }
-}
-
-PortfolioList.propTypes = {
-  onAdd: PropTypes.func,
-  onDelete: PropTypes.func,
-  portfolios: PropTypes.array
 }
