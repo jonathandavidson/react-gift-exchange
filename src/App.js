@@ -1,7 +1,7 @@
 // @flow
-import React, { Component } from 'react';
-import PortfolioList from './Portfolio/List';
-import './App.css';
+import React, { Component } from "react";
+import PortfolioList from "./Portfolio/List";
+import "./App.css";
 
 type Props = {};
 
@@ -17,7 +17,7 @@ type State = {
 export default class App extends Component<Props, State> {
   state = {
     portfolios: []
-  }
+  };
 
   addPortfolio = (portfolio: { name: string }) => {
     this.setState(state => ({
@@ -26,13 +26,15 @@ export default class App extends Component<Props, State> {
         name: portfolio.name
       })
     }));
-  }
+  };
 
   deletePortfolio = (portfolioId: number) => {
     this.setState(state => ({
-      portfolios: state.portfolios.filter(portfolio => portfolio.id !== portfolioId)
+      portfolios: state.portfolios.filter(
+        portfolio => portfolio.id !== portfolioId
+      )
     }));
-  }
+  };
 
   render() {
     return (
