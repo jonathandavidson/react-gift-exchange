@@ -1,32 +1,31 @@
 // @flow
 import React, { Component } from "react";
-
-type Portfolio = {
-  id: number,
-  name: string
-};
+import type { Person } from "../lib/types";
 
 type Props = {
-  onAdd: (portfolio: { name: string }) => void,
+  onAdd: (person: { name: string }) => void,
   onDelete: (id: number) => void,
-  portfolios: Array<Portfolio>
+  persons: Array<Person>
 };
 
 type State = {
   inputValue: string,
-  portfolios: Array<{}>
+  persons: Array<Person>
 };
 
-export default class PortfolioList extends Component<Props, State> {
+export default class PersonList extends Component<Props, State> {
   state = {
     inputValue: "",
-    portfolios: []
+    persons: []
   };
 
   handleAdd = (event: SyntheticEvent<>) => {
     event.preventDefault();
-    this.props.onAdd({ name: this.state.inputValue });
-    this.setState({ inputValue: "" });
+    const name = this.state.inputValue.trim();
+    if (name) {
+      this.props.onAdd({ name: name });
+      this.setState({ inputValue: "" });
+    }
   };
 
   handleInputChange = (event: SyntheticInputEvent<>) => {
@@ -34,21 +33,19 @@ export default class PortfolioList extends Component<Props, State> {
   };
 
   render() {
-    const listItems = this.props.portfolios.map((portfolio: Portfolio) => {
+    const listItems = this.props.persons.map((person: Person) => {
       return (
-        <li key={portfolio.id}>
-          <a href="">{portfolio.name}</a>
-          <button onClick={() => this.props.onDelete(portfolio.id)}>
-            Delete
-          </button>
+        <li key={person.id}>
+          <a href="">{person.name}</a>
+          <button onClick={() => this.props.onDelete(person.id)}>Delete</button>
         </li>
       );
     });
 
     return (
-      <div className="PortfolioList">
+      <div className="PersonList">
         <ul>{listItems}</ul>
-        <form name="add-portfolio" onSubmit={this.handleAdd}>
+        <form name="add-person" onSubmit={this.handleAdd}>
           <input
             value={this.state.inputValue}
             onChange={this.handleInputChange}

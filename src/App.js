@@ -1,49 +1,57 @@
 // @flow
 import React, { Component } from "react";
-import PortfolioList from "./Portfolio/List";
+import PersonList from "./Person/List";
+import Exchange from "./Exchange";
+import getExchange from "./lib/exchange";
 import "./App.css";
+import type { Person, ExchangeAssociation } from "./lib/types";
 
 type Props = {};
 
-type Portfolio = {
-  id: number,
-  name: string
-};
-
 type State = {
-  portfolios: Array<Portfolio>
+  persons: Array<Person>,
+  exchange: Array<ExchangeAssociation>
 };
 
 export default class App extends Component<Props, State> {
   state = {
-    portfolios: []
+    persons: [],
+    exchange: []
   };
 
-  addPortfolio = (portfolio: { name: string }) => {
+  addPerson = (person: { name: string }) => {
     this.setState(state => ({
-      portfolios: state.portfolios.concat({
-        id: state.portfolios.length + 1,
-        name: portfolio.name
+      persons: state.persons.concat({
+        id: state.persons.length + 1,
+        name: person.name
       })
     }));
   };
 
-  deletePortfolio = (portfolioId: number) => {
+  deletePerson = (personId: number) => {
     this.setState(state => ({
-      portfolios: state.portfolios.filter(
-        portfolio => portfolio.id !== portfolioId
-      )
+      exchange: [],
+      persons: state.persons.filter(person => person.id !== personId)
     }));
+  };
+
+  createExchange = () => {
+    if (this.state.persons.length > 1) {
+      const exchange = getExchange(this.state.persons);
+      this.setState({ exchange });
+    }
   };
 
   render() {
     return (
       <div className="App">
-        <PortfolioList
-          portfolios={this.state.portfolios}
-          onAdd={this.addPortfolio}
-          onDelete={this.deletePortfolio}
+        <PersonList
+          persons={this.state.persons}
+          onAdd={this.addPerson}
+          onDelete={this.deletePerson}
         />
+        <button onClick={this.createExchange}>Create Gift Exchange</button>
+        <Exchange exchange={this.state.exchange} persons={this.state.persons} />
       </div>
     );
   }
