@@ -22,7 +22,7 @@ export default class PersonList extends Component<Props, State> {
   handleAdd = (event: SyntheticEvent<>) => {
     event.preventDefault();
     const name = this.state.inputValue.trim();
-    if (name) {
+    if (name && !this.props.persons.find(person => name === person.name)) {
       this.props.onAdd({ name: name });
       this.setState({ inputValue: "" });
     }
