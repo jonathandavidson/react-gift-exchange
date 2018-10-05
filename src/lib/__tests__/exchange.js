@@ -17,45 +17,45 @@ describe("lib/exchange", () => {
 
   describe("when two people are provided", () => {
     const people = makePeople(2);
-    const exchange = getExchange(people);
-
-    it("each person buys for each other", () => {
-      const expected = [{ person: 0, buysFor: 1 }, { person: 1, buysFor: 0 }];
-
-      expect(exchange).toEqual(expected);
-    });
-
-    testEveryoneGetsOneGift(people, exchange);
-    testNoOneBuysForThemselves(exchange);
+    testValidExchange(people);
   });
 
   describe("when three people are provided", () => {
     const people = makePeople(3);
-    const exchange = getExchange(people);
-
-    testEveryoneGetsOneGift(people, exchange);
-    testNoOneBuysForThemselves(exchange);
+    testValidExchange(people);
   });
 
   describe("when ten people are provided", () => {
     const people = makePeople(10);
-    const exchange = getExchange(people);
-
-    testEveryoneGetsOneGift(people, exchange);
-    testNoOneBuysForThemselves(exchange);
+    testValidExchange(people);
   });
 });
 
-function testNoOneBuysForThemselves(exchange) {
+function testValidExchange(people) {
+  const exchanges = [];
+  for (let i = 0; i < 50; i++) {
+    exchanges.push(getExchange(people));
+  }
+
+  it("everyone gets exactly one gift", () => {
+    testEveryoneGetsOneGift(people, exchanges);
+  });
+
   it("no one buys for themsleves", () => {
+    testNoOneBuysForThemselves(exchanges);
+  });
+}
+
+function testNoOneBuysForThemselves(exchanges) {
+  exchanges.forEach(exchange => {
     exchange.forEach(association => {
-      expect(association.person).not.toBe(association.buysFor);
+      expect(association.person).not.toEqual(association.buysFor);
     });
   });
 }
 
-function testEveryoneGetsOneGift(people, exchange) {
-  it("everyone gets exactly one gift", () => {
+function testEveryoneGetsOneGift(people, exchanges) {
+  exchanges.forEach(exchange => {
     expect(exchange.length).toBe(people.length);
 
     people.forEach(person => {
