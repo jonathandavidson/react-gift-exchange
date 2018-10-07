@@ -4,6 +4,14 @@ import type { Person } from "../lib/types";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import DeleteIcon from "@material-ui/icons/Delete";
+import PersonIcon from "@material-ui/icons/PermIdentity";
 
 type Props = {
   onAdd: (person: { name: string }) => void,
@@ -38,16 +46,28 @@ export default class PersonList extends Component<Props, State> {
   render() {
     const listItems = this.props.persons.map((person: Person) => {
       return (
-        <li key={person.id}>
-          <a href="">{person.name}</a>
-          <button onClick={() => this.props.onDelete(person.id)}>Delete</button>
-        </li>
+        <ListItem key={person.id}>
+          <ListItemAvatar>
+            <Avatar>
+              <PersonIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={person.name} />
+          <ListItemSecondaryAction>
+            <IconButton
+              aria-label="Delete"
+              onClick={() => this.props.onDelete(person.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
       );
     });
 
     return (
       <div className="PersonList">
-        <ul>{listItems}</ul>
+        <List>{listItems}</List>
         <form name="add-person" onSubmit={this.handleAdd}>
           <TextField
             label="Add a name"
