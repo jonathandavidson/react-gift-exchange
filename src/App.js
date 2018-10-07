@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import PersonList from "./Person/List";
 import Exchange from "./Exchange";
 import getExchange from "./lib/exchange";
-import "./App.css";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import CreateExchangeButton from "./CreateExchangeButton";
 import type { Person, ExchangeAssociation } from "./lib/types";
 
 type Props = {};
@@ -44,15 +45,21 @@ export default class App extends Component<Props, State> {
 
   render() {
     return (
-      <div className="App">
-        <PersonList
-          persons={this.state.persons}
-          onAdd={this.addPerson}
-          onDelete={this.deletePerson}
-        />
-        <button onClick={this.createExchange}>Create Gift Exchange</button>
-        <Exchange exchange={this.state.exchange} persons={this.state.persons} />
-      </div>
+      <React.Fragment>
+        <CssBaseline />
+        <div className="App">
+          <PersonList
+            persons={this.state.persons}
+            onAdd={this.addPerson}
+            onDelete={this.deletePerson}
+          />
+          <CreateExchangeButton onClick={this.createExchange} />
+          <Exchange
+            exchange={this.state.exchange}
+            persons={this.state.persons}
+          />
+        </div>
+      </React.Fragment>
     );
   }
 }
