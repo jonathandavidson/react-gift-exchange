@@ -1,6 +1,9 @@
 // @flow
 import React, { Component } from "react";
 import type { Person } from "../lib/types";
+import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
 
 type Props = {
   onAdd: (person: { name: string }) => void,
@@ -46,12 +49,16 @@ export default class PersonList extends Component<Props, State> {
       <div className="PersonList">
         <ul>{listItems}</ul>
         <form name="add-person" onSubmit={this.handleAdd}>
-          <input
-            value={this.state.inputValue}
+          <TextField
+            label="Add a name"
             onChange={this.handleInputChange}
-            type="text"
+            margin="dense"
+            value={this.state.inputValue}
+            variant="filled"
           />
-          <button type="submit">Add</button>
+          <IconButton type="submit" color="primary" aria-label="Add">
+            <AddIcon />
+          </IconButton>
         </form>
       </div>
     );
