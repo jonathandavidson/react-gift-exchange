@@ -1,24 +1,17 @@
-// @flow
 import React from "react";
-import type { ExchangeAssociation, Person } from "./lib/types";
 
-type Props = {
-  exchange: Array<ExchangeAssociation>,
-  persons: Array<Person>
-};
-
-export default function Exchange(props: Props) {
+export default function Exchange(props) {
   const associations = props.exchange.map(association => {
-    const person: Person | void = props.persons.find(
+    const person = props.persons.find(
       person => person.id === association.person
     );
-    const buysFor: Person | void = props.persons.find(
+    const buysFor = props.persons.find(
       person => person.id === association.buysFor
     );
 
     if (person && buysFor) {
       return (
-        <li>
+        <li key={association.person + association.buysFor}>
           {person.name} buys for {buysFor.name}
         </li>
       );

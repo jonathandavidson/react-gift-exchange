@@ -1,6 +1,4 @@
-// @flow
 import React, { Component } from "react";
-import type { Person } from "../lib/types";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
@@ -8,79 +6,84 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import DeleteIcon from "@material-ui/icons/Delete";
 import PersonIcon from "@material-ui/icons/PermIdentity";
+import PersonListItem from "./Item";
+import { withStyles } from "@material-ui/core/styles";
 
-type Props = {
-  onAdd: (person: { name: string }) => void,
-  onDelete: (id: number) => void,
-  persons: Array<Person>
+const styles = {
+  listInput: {
+    "margin-left": "1rem"
+  }
 };
 
-type State = {
-  inputValue: string,
-  persons: Array<Person>
-};
-
-export default class PersonList extends Component<Props, State> {
+class PersonList extends Component {
   state = {
     inputValue: "",
     persons: []
   };
 
-  handleAdd = (event: SyntheticEvent<>) => {
-    event.preventDefault();
+  addPerson() {
     const name = this.state.inputValue.trim();
     if (name && !this.props.persons.find(person => name === person.name)) {
       this.props.onAdd({ name: name });
       this.setState({ inputValue: "" });
     }
+  }
+
+  handleAdd = event => {
+    event.preventDefault();
+    this.addPerson();
   };
 
-  handleInputChange = (event: SyntheticInputEvent<>) => {
+  handleInputChange = event => {
     this.setState({ inputValue: event.target.value });
   };
 
+  handleInputKeypress = event => {
+    if (event.key === "Enter") {
+      this.addPerson();
+    }
+  };
+
   render() {
-    const listItems = this.props.persons.map((person: Person) => {
+    const listItems = this.props.persons.map(person => {
       return (
-        <ListItem key={person.id}>
+        <PersonListItem
+          key={person.id}
+          person={person}
+          onDelete={() => this.props.onDelete(person.id)}
+        />
+      );
+    });
+
+    return (
+      <List>
+        {listItems}
+        <ListItem>
           <ListItemAvatar>
             <Avatar>
               <PersonIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={person.name} />
+          <TextField
+            className={this.props.classes.listInput}
+            label="Add a name"
+            fullWidth={true}
+            onChange={this.handleInputChange}
+            onKeyPress={this.handleInputKeypress}
+            margin="dense"
+            value={this.state.inputValue}
+          />
           <ListItemSecondaryAction>
-            <IconButton
-              aria-label="Delete"
-              onClick={() => this.props.onDelete(person.id)}
-            >
-              <DeleteIcon />
+            <IconButton aria-label="Add Person" onClick={this.handleAdd}>
+              <AddIcon />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
-      );
-    });
-
-    return (
-      <div className="PersonList">
-        <List>{listItems}</List>
-        <form name="add-person" onSubmit={this.handleAdd}>
-          <TextField
-            label="Add a name"
-            onChange={this.handleInputChange}
-            margin="dense"
-            value={this.state.inputValue}
-            variant="filled"
-          />
-          <IconButton type="submit" color="primary" aria-label="Add">
-            <AddIcon />
-          </IconButton>
-        </form>
-      </div>
+      </List>
     );
   }
 }
+
+export default withStyles(styles)(PersonList);
