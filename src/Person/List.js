@@ -9,6 +9,8 @@ import Avatar from "@material-ui/core/Avatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import PersonIcon from "@material-ui/icons/PermIdentity";
 import PersonListItem from "./Item";
+import CreateButton from "./CreateButton";
+import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = {
@@ -58,30 +60,40 @@ class PersonList extends Component {
     });
 
     return (
-      <List>
-        {listItems}
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <PersonIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <TextField
-            className={this.props.classes.listInput}
-            label="Add a name"
-            fullWidth={true}
-            onChange={this.handleInputChange}
-            onKeyPress={this.handleInputKeypress}
-            margin="dense"
-            value={this.state.inputValue}
-          />
-          <ListItemSecondaryAction>
-            <IconButton aria-label="Add Person" onClick={this.handleAdd}>
-              <AddIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-      </List>
+      <React.Fragment>
+        <Typography variant="title" gutterBottom>
+          Create a Gift Exchange
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          Add the people participating in your gift exchange and click Create to
+          see the results.
+        </Typography>
+        <List>
+          {listItems}
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>
+                <PersonIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <TextField
+              className={this.props.classes.listInput}
+              label="Add a name"
+              fullWidth={true}
+              onChange={this.handleInputChange}
+              onKeyPress={this.handleInputKeypress}
+              margin="dense"
+              value={this.state.inputValue}
+            />
+            <ListItemSecondaryAction>
+              <IconButton aria-label="Add Person" onClick={this.handleAdd}>
+                <AddIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+        <CreateButton onClick={this.props.onCreateExchange} />
+      </React.Fragment>
     );
   }
 }

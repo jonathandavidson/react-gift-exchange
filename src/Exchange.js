@@ -1,4 +1,12 @@
 import React from "react";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import PersonIcon from "@material-ui/icons/PermIdentity";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 export default function Exchange(props) {
   const associations = props.exchange.map(association => {
@@ -11,14 +19,41 @@ export default function Exchange(props) {
 
     if (person && buysFor) {
       return (
-        <li key={association.person + association.buysFor}>
-          {person.name} buys for {buysFor.name}
-        </li>
+        <ListItem key={`${association.person}${association.buysFor}`}>
+          <ListItemAvatar>
+            <Avatar>
+              <PersonIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={person.name}
+            secondary={`buys for ${buysFor.name}`}
+          />
+        </ListItem>
       );
     } else {
       throw new Error("Invalid exchange results supplied.");
     }
   });
 
-  return props.exchange.length > 0 && <ul>{associations}</ul>;
+  return (
+    props.exchange.length > 0 && (
+      <React.Fragment>
+        <Typography variant="title" gutterBottom>
+          The Davidson Family Gift Exchange
+        </Typography>
+        <List>{associations}</List>
+        <Button color="primary" onClick={props.onBackClick} variant="contained">
+          Back
+        </Button>
+        <Button
+          color="primary"
+          onClick={props.onReshuffleClick}
+          variant="contained"
+        >
+          Reshuffle
+        </Button>
+      </React.Fragment>
+    )
+  );
 }
